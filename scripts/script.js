@@ -21,8 +21,20 @@ function clearDisplay() {
 function updateDisplay(calc) {
     let resultDiv = document.querySelector("#result");
 
-    resultDiv.innerHTML= calc.result;
-
+    if (calc.result == "") {
+        if (calc.operand2 == "") {
+            if (calc.operand1 == "") {
+                resultDiv.innerHTML = 0;
+            } else {
+                resultDiv.innerHTML = calc.operand1;
+            } 
+        } else {
+            resultDiv.innerHTML = calc.operand2;
+        }
+    } else {
+        resultDiv.innerHTML= calc.result;
+    }
+    
 }
 
 function handleInput(keypress, calc) {
@@ -30,7 +42,17 @@ function handleInput(keypress, calc) {
     let operands="+-*/";
     let special=".=";
 
-    if (special.includes(keypress)) {
+    console.log("handleInput keypress:", keypress);
+    console.log("handleInput Calc start:", calc);
+    console.log("Is special:", special.includes(keypress));
+    console.log("Is number:", numbers.includes(keypress));
+    console.log("Is operand:", operands.includes(keypress));
+
+    if (keypress == "CE") {
+        clearDisplay();
+    }
+    else if (special.includes(keypress)) {
+        console.log("special !");
         if (keypress == ".") {
             if (calc.operator == "") {
                 calc.operand1 += ".";
@@ -38,22 +60,28 @@ function handleInput(keypress, calc) {
                 calc.operand2 += ".";
             }
         } else if (keypress == "=") {
-            if (!calc.operand1 == "" && !calc.operand2 == "" && !calc.operator == "") {
+            if ( !(calc.operand1 == "") && !(calc.operand2 == "") && !(calc.operator == "") ) {
                 calc.result = operate(calc.operator, calc.operand1, calc.operand2);
                 calc.operand1 = calc.result;
                 calc.operand2 = "";
                 calc.operator = "";
+                calc.result = ""
             }
         }
     } else if (numbers.includes(keypress)) {
+        console.log("number !");
         if (calc.operand1 == "") {
             calc.operand1 = keypress;
         } else {
             calc.operand2 = keypress;
         }
     } else if (operands.includes(keypress)) {
+        console.log("operand !");
         calc.operator = keypress;
     }
+
+    console.log("handleInput Calc finish:", calc);
+    updateDisplay(calc);
 }
 
 let calculation = {
@@ -66,13 +94,12 @@ let calculation = {
 testOperation = operate("/", 10, 5);
 console.log("Test:", testOperation);
 
-clearButton = document.querySelector("#ce-btn");
-clearButton.addEventListener(
-    "click", clearDisplay
-);
 
-equalsBtn = document.querySelector("#equals");
-equalsBtn.addEventListener(
-    "click", 
-)
+allBtns = document.querySelectorAll(".numpad-button");
+console.log(allBtns);
+allBtns.forEach(element => {
+    element.addEventListener(
+        "click", () => handleInput(element.textContent, calculation)
+    );
+});
 

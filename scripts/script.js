@@ -48,6 +48,12 @@ function handleInput(keypress, calc) {
 
     if (keypress == "CE") {
         clearDisplayAndReset(calc);
+    } else if (keypress == "+/-") {
+        if (calc.operator == "") {
+            calc.operand1 = -calc.operand1;
+        } else {
+            calc.operand2 = - calc.operand2;
+        }
     } else if (special.includes(keypress)) {
         if (keypress == ".") {
             if (calc.operator == "") {
@@ -97,3 +103,9 @@ allBtns.forEach(element => {
     );
 });
 
+/* 
++- button
+teilen durch 0
+ist teilen von negativ durch negativ positiv
+
+*/

@@ -13,28 +13,26 @@ function operate(operator, num1, num2) {
     }
 }
 
-function clearDisplay() {
-    document.querySelector("#calculation").innerHTML="";
+function clearDisplay(calc) {
+    calc.operand1 = "";
+    calc.operand2 = "";
+    calc.operator = "";
+    calc.result = ""
     document.querySelector("#result").innerHTML= 0;
 }
 
 function updateDisplay(calc) {
     let resultDiv = document.querySelector("#result");
 
-    if (calc.result == "") {
-        if (calc.operand2 == "") {
-            if (calc.operand1 == "") {
-                resultDiv.innerHTML = 0;
-            } else {
-                resultDiv.innerHTML = calc.operand1;
-            } 
+    if (calc.operand2 == "") {
+        if (calc.operand1 == "") {
+            resultDiv.innerHTML = 0;
         } else {
-            resultDiv.innerHTML = calc.operand2;
-        }
+            resultDiv.innerHTML = calc.operand1;
+        } 
     } else {
-        resultDiv.innerHTML= calc.result;
-    }
-    
+        resultDiv.innerHTML = calc.operand2;
+    }   
 }
 
 function handleInput(keypress, calc) {
@@ -49,10 +47,8 @@ function handleInput(keypress, calc) {
     console.log("Is operand:", operands.includes(keypress));
 
     if (keypress == "CE") {
-        clearDisplay();
-    }
-    else if (special.includes(keypress)) {
-        console.log("special !");
+        clearDisplay(calc);
+    } else if (special.includes(keypress)) {
         if (keypress == ".") {
             if (calc.operator == "") {
                 calc.operand1 += ".";
@@ -61,22 +57,26 @@ function handleInput(keypress, calc) {
             }
         } else if (keypress == "=") {
             if ( !(calc.operand1 == "") && !(calc.operand2 == "") && !(calc.operator == "") ) {
-                calc.result = operate(calc.operator, calc.operand1, calc.operand2);
-                calc.operand1 = calc.result;
+                calc.operand1 = operate(calc.operator, calc.operand1, calc.operand2);;
                 calc.operand2 = "";
                 calc.operator = "";
-                calc.result = ""
             }
         }
     } else if (numbers.includes(keypress)) {
-        console.log("number !");
-        if (calc.operand1 == "") {
-            calc.operand1 = keypress;
+        // check if operator is entered already and decide which operand to expand
+        if (calc.operator == "") {
+            calc.operand1 += keypress;
         } else {
-            calc.operand2 = keypress;
+            calc.operand2 += keypress;
         }
     } else if (operands.includes(keypress)) {
-        console.log("operand !");
+        // evaluate expression, store in operand1 and reset others
+        // if operands and operators are filled already
+        if ( !(calc.operand1 == "") && !(calc.operand2 == "") && !(calc.operator == "") ) {
+            calc.operand1 = operate(calc.operator, calc.operand1, calc.operand2);
+            calc.operand2 = "";
+            calc.operator = "";
+        }
         calc.operator = keypress;
     }
 
@@ -88,12 +88,7 @@ let calculation = {
     operand1: "",
     operand2: "",
     operator: "",
-    result: "",
 }
-
-testOperation = operate("/", 10, 5);
-console.log("Test:", testOperation);
-
 
 allBtns = document.querySelectorAll(".numpad-button");
 console.log(allBtns);

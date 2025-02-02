@@ -83,6 +83,11 @@ body {
     background-color: chocolate;
 }
 
+.numpad-button.operator:hover {
+    background-color: blanchedalmond;
+    cursor: pointer;
+}
+
 .numpad-button.operator.equals {
     width: 100%;
 }

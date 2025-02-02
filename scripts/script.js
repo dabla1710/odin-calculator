@@ -13,7 +13,7 @@ function operate(operator, num1, num2) {
     }
 }
 
-function clearDisplay(calc) {
+function clearDisplayAndReset(calc) {
     calc.operand1 = "";
     calc.operand2 = "";
     calc.operator = "";
@@ -47,13 +47,13 @@ function handleInput(keypress, calc) {
     console.log("Is operand:", operands.includes(keypress));
 
     if (keypress == "CE") {
-        clearDisplay(calc);
+        clearDisplayAndReset(calc);
     } else if (special.includes(keypress)) {
         if (keypress == ".") {
             if (calc.operator == "") {
-                calc.operand1 += ".";
+                if (!calc.operand1.includes(".")) calc.operand1 += ".";
             } else {
-                calc.operand2 += ".";
+                if (!calc.operand2.includes(".")) calc.operand2 += ".";
             }
         } else if (keypress == "=") {
             if ( !(calc.operand1 == "") && !(calc.operand2 == "") && !(calc.operator == "") ) {
@@ -91,7 +91,6 @@ let calculation = {
 }
 
 allBtns = document.querySelectorAll(".numpad-button");
-console.log(allBtns);
 allBtns.forEach(element => {
     element.addEventListener(
         "click", () => handleInput(element.textContent, calculation)

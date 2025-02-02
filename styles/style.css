@@ -90,10 +90,10 @@ body {
 }
 
 .numpad-button.operator#equals {
-    width: 50%;
+    flex: 1;
 }
 
 .numpad-button.operator#ce-btn {
-    width: 50%;
+    flex: 1;
 }
 

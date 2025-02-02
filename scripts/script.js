@@ -36,15 +36,9 @@ function updateDisplay(calc) {
 }
 
 function handleInput(keypress, calc) {
-    let numbers="0123456789";
-    let operands="+-*/";
-    let special=".=";
-
-    console.log("handleInput keypress:", keypress);
-    console.log("handleInput Calc start:", calc);
-    console.log("Is special:", special.includes(keypress));
-    console.log("Is number:", numbers.includes(keypress));
-    console.log("Is operand:", operands.includes(keypress));
+    const numbers="0123456789";
+    const operands="+-*/";
+    const special=".=";
 
     if (keypress == "CE") {
         clearDisplayAndReset(calc);
@@ -52,7 +46,7 @@ function handleInput(keypress, calc) {
         if (calc.operator == "") {
             calc.operand1 = -calc.operand1;
         } else {
-            calc.operand2 = - calc.operand2;
+            calc.operand2 = -calc.operand2;
         }
     } else if (special.includes(keypress)) {
         if (keypress == ".") {
@@ -69,15 +63,15 @@ function handleInput(keypress, calc) {
             }
         }
     } else if (numbers.includes(keypress)) {
-        // check if operator is entered already and decide which operand to expand
+        // check if operator is entered and decide on which operand to expand
         if (calc.operator == "") {
             calc.operand1 += keypress;
         } else {
             calc.operand2 += keypress;
         }
     } else if (operands.includes(keypress)) {
-        // evaluate expression, store in operand1 and reset others
-        // if operands and operators are filled already
+        // if operands and operators are filled
+        // evaluate expression, store in first operand and reset other values
         if ( !(calc.operand1 == "") && !(calc.operand2 == "") && !(calc.operator == "") ) {
             calc.operand1 = operate(calc.operator, calc.operand1, calc.operand2);
             calc.operand2 = "";
@@ -86,7 +80,6 @@ function handleInput(keypress, calc) {
         calc.operator = keypress;
     }
 
-    console.log("handleInput Calc finish:", calc);
     updateDisplay(calc);
 }
 
